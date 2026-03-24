@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda
+
+  Sample SAM Template for lambda
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+
+Resources:
+  StaticSiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      AccessControl: PublicRead
+    DeletionPolicy: Retain
+
+  StaticSiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref StaticSiteBucket
+      PolicyDocument:
+        Statement:
+          - Action: "s3:GetObject"
+            Effect: Allow
+            Resource: !Sub "${StaticSiteBucket.Arn}/*"
+            Principal: "*"
+
+  LoginPage:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Handler: Functions/LoginPage.lambda_handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+      Architectures:
+        - x86_64
+      Events:
+        LoginPage:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /
+            Method: get
+
+  RegisterAccount:
+      Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+      Properties:
+        Handler: Functions/NewAccount.lambda_handler
+        Runtime: python3.12
+        Environment:
+          Variables:
+            CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+            USER_POOL_ID: "eu-west-1_Am6MiKpr6"
+        Architectures:
+          - x86_64
+        Events:
+          NewAccount:
+            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+            Properties:
+              Path: /
+              Method: get
+
+  ConfirmAccount:
+    Type: AWS::Serverless::Function # More info about Function Resource: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    Properties:
+      Handler: Functions/ConfirmAccount.lambda_handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+      Architectures:
+        - x86_64
+      Events:
+        ConfirmAccount:
+          Type: Api # More info about API Event Source: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          Properties:
+            Path: /
+            Method: get
+
+  ForgetPassword:
+    Type: AWS::Serverless::Function # More info about Function Resource: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    Properties:
+      Handler: Functions/ForgetPassword.lambda_handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+      Architectures:
+        - x86_64
+      Events:
+        ForgetPassword:
+          Type: Api # More info about API Event Source: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          Properties:
+            Path: /
+            Method: get
+
+  HomePage:
+    Type: AWS::Serverless::Function # More info about Function Resource: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    Properties:
+      Handler: Functions/HomePage.lambda_handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+      Architectures:
+        - x86_64
+      Events:
+        HomePage:
+          Type: Api # More info about API Event Source: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          Properties:
+            Path: /
+            Method: get
+          
+  EventCreation:
+    Type: AWS::Serverless::Function # More info about Function Resource: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    Properties:
+      Handler: Functions/EventCreation.lambda_handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+      Architectures:
+        - x86_64
+      Events:
+        EventCreation:
+          Type: Api # More info about API Event Source: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          Properties:
+            Path: /
+            Method: get
+
+  EventCalender:
+    Type: AWS::Serverless::Function # More info about Function Resource: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    Properties:
+      Handler: Functions/EventCalender.lambda_handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          CLIENT_ID: "3v1pvpfgs72kgek3icl1ip7had"
+      Architectures:
+        - x86_64
+      Events:
+        EventCalender:
+          Type: Api # More info about API Event Source: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          Properties:
+            Path: /
+            Method: get
+  
+
+            
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  HelloWorldFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunction.Arn
+  HelloWorldFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt HelloWorldFunctionRole.Arn
