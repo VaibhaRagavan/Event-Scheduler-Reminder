@@ -43,6 +43,6 @@
     "time": "28/Apr/2025:08:50:44 +0000",
     "timeEpoch": 1745830244498
   },
-  "body": "{\"email\":\"vaibha97@gmail.com\",\"event_type\":\"birthday\",\"event_date\":\"2025-04-30\",\"persons\":[{\"name\":\"Sudharsan\",\"phone\":\"+919360553239\",\"wish\":\"....\"}],\"remindme\":\"true\",\"post\":\"true\"}",
+  "body": "{\"email\":\"*****\",\"event_type\":\"birthday\",\"event_date\":\"YYYY-MM-DD\",\"persons\":[{\"name\":\"***\",\"phone\":\"***",\"wish\":\"....\"}],\"remindme\":\"**\",\"post\":\"**\"}",
   "isBase64Encoded": "False"
 }
