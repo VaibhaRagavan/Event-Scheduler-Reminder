@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WishPal - Home</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 4rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">WishPal 🎉</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="homepage.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="display.html">Your account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="publicevents.html">Popular events</a>
+                    </li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Please provide the details for the upcoming event!</h4>
+        <p>To help us send the perfect birthday wish, kindly fill out the form below with the following information:</p>
+        <ul>
+            <li><strong>Name:</strong> The name of the person you're sending the wish to.</li>
+            <li><strong>Event date</strong> The person's date of birth/anniverasy/wishes (we'll remind you to send the
+                wish at the right time!).</li>
+            <li><strong>Phone Number:</strong> The person's WhatsApp number so they can receive your wish.</li>
+            <li><strong>Your Personal Wish:</strong> Feel free to write a heartfelt birthday wish that we'll send on
+                your behalf.</li>
+        </ul>
+        <p>Once you've filled out the form, just hit submit, and we'll take care of the rest. 🎉</p>
+    </div>
+    <div class="container mt-5">
+        <h2 class="text-center">Event Details Form</h2>
+
+        <form onsubmit="create_event(event)">
+            <div class="mb-3">
+                <label for="fruit" class="form-label">Choose a Event</label>
+                <select class="form-select" id="event_type" name="Event" onchange="handletoggle()">
+                    <option selected>Select Event</option>
+                    <option value="anniversary">Anniversary</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="other">Others</option>
+                </select>
+
+            </div>
+            <div class="mb-3" id="otherInputDiv" style="display: none;">
+                <label for="otherevent" class="form-label">Please specify Event name:</label>
+                <input type="text" class="form-control" id="event_name" placeholder="Enter event name">
+            </div>
+
+            <div class="form-group">
+                <label for="event_date">Event Date</label>
+                <input type="date" class="form-control" id="event_date">
+            </div>
+            <div class="container">
+                <div id="formContainer" class="mb-3" style="display: block;">
+                    <button type="button" class="btn btn-primary" onclick="addFormRow()">Add</button>
+                </div>
+            </div>
+            <div class="container">
+                <div id="formContainer2" class="mb-3" style="display: none;">
+                    <button type="button" class="btn btn-primary" onclick="addFormRow2()">Add</button>
+                </div>
+            </div>
+            <div class="mb-3">
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Remindme" id="remindme">
+                    <label class="form-check-label" for="check1">Reminde me </label>
+                    <small class="form-text text-muted">Send a reminder a day before the event </small>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Post in Public Wall " id="public">
+                    <label class="form-check-label" for="check2">PublicWall</label>
+                    <small class="form-text text-muted">Post this event in public wall where others can see this event
+                    </small>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+
+        <!-- Feedback messages -->
+        <div id="feedbackMessage" class="mt-4" style="display:none;">
+            <div id="successMessage" class="alert alert-success" role="alert">
+                Event created successfully! 🎉
+
+            </div>
+            <div id="errorMessage" class="alert alert-danger" role="alert">
+                There was an error while creating the event. Please try again.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        //Add persons dynamically for birthday and other event
+        let rowCount = 0;
+        function addFormRow() {
+
+            const container = document.getElementById("formContainer");
+            rowCount++;
+            const row = document.createElement("div");
+            row.className = "row g-2 align-items-center mb-2";
+
+            row.innerHTML = `  
+                     <div class="col-md-3">
+                     <input type="text" class="form-control" placeholder="Name" id="name-${rowCount}">
+                     </div>
+                     <div class="col-md-3">
+                     <input type="tel" class="form-control" placeholder="Phonenumber" id="phone-${rowCount}">
+                     </div>
+                     <div class="col-md-3">
+                     <input type="text" class="form-control" placeholder="wish" id="wish-${rowCount}">
+                     </div>
+            
+                     
+                     <div class="col-md-2">
+                     <button  class="btn btn-danger" onclick="this.closest('.row').remove()">Remove</button>
+                    </div>`;
+            container.appendChild(row);
+            console.log("Adding row...");
+            const phoneInput = document.getElementById(`phone-${rowCount}`);
+            const CountryCode = window.intlTelInput(phoneInput, {
+                initialCountry: "us",  
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            phoneInput.CountryCode = CountryCode
+            console.log(CountryCode);
+            
+        }
+
+        //person form for aniversary event
+        let rowCount2 = 0;
+        function addFormRow2() {
+
+            const container2 = document.getElementById("formContainer2");
+            rowCount2++;
+            const row2 = document.createElement("div");
+            row2.className = "row g-2 align-items-center mb-2";
+
+            row2.innerHTML = `  
+         <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Name1" id="name1-${rowCount2}">
+         </div>
+         <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Name2" id="name2-${rowCount2}">
+         </div>
+         <div class="col-md-3">
+         <input type="tel" class="form-control" placeholder="Phonenumber1(+countrycode....)" id="phone1-${rowCount2}">
+         </div>
+         <div class="col-md-3">
+         <input type="tel" class="form-control" placeholder="Phonenumber2(+countrycode....)" id="phone2-${rowCount2}">
+         </div>
+         <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="wish" id="wish-${rowCount2}">
+         </div>
+
+         
+         <div class="col-md-2">
+         <button  class="btn btn-danger" onclick="this.closest('.row').remove()">Remove</button>
+        </div>`;
+            container2.appendChild(row2);
+            console.log("Adding row for anniverasry...");
+            const phone1Input = document.getElementById(`phone1-${rowCount2}`);
+            const CountryCode1 = window.intlTelInput(phone1Input, {
+                initialCountry: "us",  
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            phone1Input.CountryCode1 = CountryCode1
+            console.log(phone1Input)
+            console.log(CountryCode1)
+            const phone2Input = document.getElementById(`phone2-${rowCount2}`);
+            const CountryCode2 = window.intlTelInput(phone2Input, {
+                initialCountry: "us",  
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+            });
+            phone2Input.CountryCode2 = CountryCode2
+            console.log(CountryCode2)
+            console.log(phone2Input)
+        }
+
+
+        //Get the event Type from select
+        function handletoggle() {
+
+            const select = document.getElementById("event_type");
+            let selectedValue = select.value;
+            const otherdiv = document.getElementById("otherInputDiv");
+            const annvdiv = document.getElementById("formContainer2");
+            const birthdiv = document.getElementById('formContainer');
+            console.log(selectedValue)
+            if (selectedValue == "other") {
+                otherdiv.style.display = "block";
+                birthdiv.style.display = 'block';
+                annvdiv.style.display = 'none';
+            }
+            if (selectedValue == 'anniversary') {
+                annvdiv.style.display = 'block';
+                birthdiv.style.display = 'none';
+            }
+            if (selectedValue == 'birthday') {
+                otherdiv.style.display = 'none';
+                birthdiv.style.display = 'block';
+                annvdiv.style.display = 'none'
+
+            }
+
+        }
+
+
+        // Function to parse the JWT token and extract user info
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                return JSON.parse(atob(base64));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function create_event(event) {
+            event.preventDefault();  // Prevent the form from submitting the default way
+            const event_type = document.getElementById("event_type").value;
+            const event_date = document.getElementById("event_date").value;
+            const other_event_type = document.getElementById("event_name").value;
+            const reminder = document.getElementById("remindme").checked ? true : false;
+            const postpublic = document.getElementById('public').checked ? true : false;
+            console.log(reminder);
+            console.log(postpublic);
+
+
+            if (event_type == "other" && !other_event_type) {
+                alert("Please specify the event name")
+            }
+            if (!event_date) {
+                alert("Please provide an event date.");
+                return;
+            }
+
+            const persons = []
+            if (event_type != "anniversary") {
+                for (let i = 0; i <= rowCount; i++) {
+                    const nameInput = document.getElementById(`name-${i}`);
+                    const phoneInput = document.getElementById(`phone-${i}`);
+                    const wishInput = document.getElementById(`wish-${i}`);
+
+                    if (nameInput && phoneInput && wishInput) {
+                        const name = nameInput.value.trim();
+                        const phone = phoneInput.CountryCode.getNumber();
+                        console.log(phone)
+                        const wish = wishInput.value.trim();
+
+                        if (name && phone && wish) {
+                            persons.push({ name, phone, wish });
+                        }
+                    }
+                }
+                console.log(persons)
+
+            } else {
+                for (let j = 0; j <= rowCount2; j++) {
+                    const name1Input = document.getElementById(`name1-${j}`);
+                    const name2Input = document.getElementById(`name2-${j}`);
+                    const phone1Input = document.getElementById(`phone1-${j}`);
+                    const phone2Input = document.getElementById(`phone2-${j}`);
+                    const wishInput = document.getElementById(`wish-${j}`);
+
+                    if (name1Input && name2Input && phone1Input && phone2Input && wishInput) {
+                        const name1 = name1Input.value.trim();
+                        const name2 = name2Input.value.trim();
+                        const phone1 = phone1Input.CountryCode1.getNumber() ;
+                        console.log(phone1)
+                        const phone2 = phone2Input.CountryCode2.getNumber();
+                        console.log(phone2)
+                        const wish = wishInput.value.trim();
+
+                        if (name1 && name2 && phone1 && phone2 && wish) {
+                            persons.push({ name1, name2, phone1, phone2, wish });
+                        }
+                    }
+                }
+                console.log(persons)
+            }
+
+
+
+
+            // Get auth token from session storage
+            const token = sessionStorage.getItem('authToken');
+
+            if (!token) {
+                alert("Session expired. Please log in again.");
+                sessionStorage.clear();
+                window.location.href = 'index.html';  // Redirect to login page
+                return;
+            }
+
+            const userInfo = parseJwt(token);
+
+            // Check if the session has expired
+            const now = Math.floor(Date.now() / 1000);  // Get current time in seconds
+            if (userInfo.exp < now) {
+                alert("Session expired. Please log in again.");
+                sessionStorage.clear();
+                window.location.href = 'index.html';  // Redirect to login page if session expired
+                return;
+            }
+
+            const email = userInfo.email;
+            console.log(email); // Extract email from user info
+
+            try {
+                // Make the API call to create the event
+                const response = await fetch("https://wn1jv4hbnd.execute-api.eu-west-1.amazonaws.com/default/Event_creation", {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        'email': email,
+                        'event_type': event_type,
+                        'event_date': event_date,
+                        'persons': persons,
+                        'remindme': reminder,
+                        'post': postpublic,
+                        'other_event_type':other_event_type
+
+
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                // Show success message
+                document.getElementById("successMessage").style.display = "block";
+                document.getElementById("errorMessage").style.display = "none";
+                document.getElementById("feedbackMessage").style.display = "block";
+            } catch (error) {
+                console.error("Error creating event", error);
+
+                // Show error message
+                document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
+                document.getElementById("feedbackMessage").style.display = "block";
+            }
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>

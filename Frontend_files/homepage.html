@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WishPal - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">WishPal 🎉</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="event_form.html">Event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="calender.html">Your account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="publicevents.html">Popular events</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Greeting -->
+    <div class="container text-center mt-5">
+        <h2 id="greeting">Loading your greeting...</h2>
+    </div>
+
+    <!-- About Us Section -->
+    <div class="container mt-5">
+        <h3 class="mb-3 text-primary">🥳 About Us</h3>
+        <p>
+            Welcome to <strong>WishPal</strong> – your personal celebration assistant! 🎉<br><br>
+            We know how important it is to remember the special days of the people who matter most to you. That's why we
+            created this platform – a place where you can easily store birthdays and anniversaries of your friends and family.
+        </p>
+        <ul>
+            <li>📅 Add events like birthdays or anniversaries or any other events and reminders</li>
+            <li>📬 We send a heartfelt wish on your behalf.</li>
+            <li>✅ You’ll get a notification once the message has been delivered.</li>
+        </ul>
+        <p>
+            No more forgotten wishes. No more last-minute scrambles.
+            Just thoughtful messages sent on time, every time.<br>
+            Let us help you spread smiles and stay connected – effortlessly.
+        </p>
+    </div>
+
+    <!-- Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            function parseJwt(token) {
+                try {
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    return JSON.parse(atob(base64));
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            const token = sessionStorage.getItem('authToken');
+            const userInfo = parseJwt(token);
+
+            if (!userInfo) {
+                alert("Invalid session. Please log in again.");
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const now = Math.floor(Date.now() / 1000);
+            if (userInfo.exp < now) {
+                alert("Session expired. Please log in again.");
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Fetch user name from backend
+            (async () => {
+                try {
+                    const resp = await fetch("https://wn1jv4hbnd.execute-api.eu-west-1.amazonaws.com/default/HomePage", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: userInfo.email }),
+                    });
+
+                    const data = await resp.json();
+
+                    if (resp.ok) {
+                        const message = data.response;
+                        document.getElementById("greeting").innerText = `WELCOME ${message}`;
+                    } else {
+                        console.error('Error fetching user info:', data);
+                        document.getElementById("greeting").innerText = `WELCOME!`;
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    document.getElementById("greeting").innerText = `WELCOME!`;
+                }
+            })();
+        });
+    </script>
+
+</body>
+
+</html>

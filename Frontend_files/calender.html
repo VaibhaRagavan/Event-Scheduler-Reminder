@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                initialDate: '2025-04-07',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: async function (fetchInfo, successCallback, failureCallback) {
+                    const events = await event_function();
+                    successCallback(events);
+                },
+                dateClick: function (info) {
+                    alert(info.dateStr)
+                },
+                eventClick: function (info) {
+                    console.log(info)
+                    document.getElementById('eventTitle').textContent = 'Title: ' + info.event.title;
+                    document.getElementById('eventStart').textContent = 'Start: ' + info.event.start.toLocaleString();
+                    document.getElementById('eventDescription').textContent = 'Description: ' + (info.event.extendedProps.description || 'No description provided.');
+                    var check_box=info.event.extendedProps.remindme;
+                    console.log(check_box);
+                    if(check_box){
+                    document.getElementById('remindme').checked=check_box;}
+                
+
+
+                    document.getElementById('myModal').style.display = 'flex'
+
+                }
+            });
+
+
+            calendar.render();
+            document.getElementById('closeModal').addEventListener('click', function () {
+                document.getElementById('myModal').style.display = 'none';
+            });
+        });
+        async function event_function() {
+            function parseJwt(token) {
+                try {
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    return JSON.parse(atob(base64));
+                } catch (e) {
+                    return null;
+                }
+            }
+
+
+
+            // Get auth token from session storage
+            const token = sessionStorage.getItem('authToken');
+
+            if (!token) {
+                alert("Session expired. Please log in again.");
+                sessionStorage.clear();
+                window.location.href = 'index.html';  // Redirect to login page
+                return;
+            }
+
+            const userInfo = parseJwt(token);
+
+            // Check if the session has expired
+            const now = Math.floor(Date.now() / 1000);  // Get current time in seconds
+            if (userInfo.exp < now) {
+                alert("Session expired. Please log in again.");
+                sessionStorage.clear();
+                window.location.href = 'index.html';  // Redirect to login page if session expired
+                return;
+            }
+
+            const email = userInfo.email;
+            console.log(email); // Extract email from user info
+
+
+
+            const response = await fetch("https://wn1jv4hbnd.execute-api.eu-west-1.amazonaws.com/default/Event_calender", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            })
+            const result = await response.json();
+            console.log(result)
+
+            const events = result.events.map(event => {
+                let description =' ';
+                let event_type=event.event_type
+                console.log(event_type)
+
+                if(event_type === "anniversary") {
+                    event.recipient.forEach((person) => {
+                        description +=
+                            `
+                             Name 1: ${person.name1},
+                            Name 2: ${person.name2},
+                            Phone 1: ${person.phone1},
+                            Phone 2: ${person.phone2},
+                            Wish: ${person.wish}`;
+                    });
+
+                }
+                else {
+                    event.recipient.forEach((person) => {
+                        description +=
+                            `
+                            Name:${person.name}, 
+                             Phone:${person.phone}, 
+                             Wish:${person.wish}`;
+                    });
+                }
+            
+
+                return {
+                    title: event_type,
+                    start: ChangeTimeFormat(event.eventdate),
+                    id: event.eventid,
+                    extendedProps: {
+                        description: description,
+                        remindme:event.remindme
+                    },
+                    
+
+                }
+            });
+            console.log(events)
+            return events;
+        }
+            function ChangeTimeFormat(StringDate) {
+                const Formatted_date = new Date(StringDate + 'T00:00:00');
+                return Formatted_date.toISOString();
+
+            }
+
+
+
+
+    </script>
+    <style>
+        /* Custom modal style */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Overlay */
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 50%;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='calendar'></div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <h3>Event Details</h3>
+            <p id="eventTitle">Title: </p>
+            <p id="eventStart">Start: </p>
+            <p id="eventDescription">Description: </p>
+            <input type="checkbox" id="remindme" name="remindme" value="">
+            <label for="remindme"> RemindMe</label><br>
+            <button id="delete">Delete</button>
+            <button id="edit">Edit</button>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

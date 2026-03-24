@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Your Account</title>
+    <meta name="viewport" content="width=device-width, inCountryCodeal-scale=1">
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card p-4 shadow" style="max-width: 500px; width: 100%; border-radius: 1rem;">
+            <h3 class="text-center mb-4">Verify Your Email</h3>
+            <form onsubmit="verifyaccount(event)">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="code" class="form-label">Confirmation Code</label>
+                    <input type="text" id="code" class="form-control" placeholder="Enter the code from your email" required>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Confirm Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function verifyaccount(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const code = document.getElementById("code").value;
+
+            try {
+                const response = await fetch('https://wn1jv4hbnd.execute-api.eu-west-1.amazonaws.com/default/Confirm_account', {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, code })
+                });
+
+                const result = await response.json();
+                console.log("Response:", result);
+
+                if (result.message == "Account confirmed successfully") {
+                    alert("Your account has been verified! Please login.");
+                    window.location.href = 'index.html';
+                } else {
+                    alert(result.response || "Verification failed. Please try again.");
+                }
+
+            } catch (error) {
+                alert("Error verifying account: " + error.message);
+            }
+        }
+    </script>
+</body>
+
+</html>
