@@ -45,6 +45,6 @@
     "time": "20/Apr/2025:16:13:43 +0000",
     "timeEpoch": 1745165623282
   },
-  "body": "{\"name\":\"Vijay Vasudevan\",\"dob\":\"1989-02-01\",\"email\":\"vijayvasudev21@gmail.com\",\"password\":\"test4321\",\"phonenumber\":\"+353872993368\"}",
+  "body": "{\"name\":\"****\",\"dob\":\"YYYY-MM-DD\",\"email\":\"****\",\"password\":\"***\",\"phonenumber\":\"**\"}",
   "isBase64Encoded":"False"
 }
