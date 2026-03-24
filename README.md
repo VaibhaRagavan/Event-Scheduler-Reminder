@@ -24,11 +24,11 @@ Built with **AWS Lambda, API Gateway, and a simple frontend**.
 - **Data Storage**:  DynamoDB
 
 ---
-## Event-Scheduler-Reminder/
-│
-├─ Frontend_files/ # HTML, CSS, JS for the frontend
-├─ Functions/ # Python backend scripts for reminders
-├─ template.yaml # Deployment/configuration template
-└─ README.md # Project documentation
+## Folder Structure
+Event Schedule r& Reminder
+─ Frontend_files/ # HTML, CSS, JS for the frontend
+─ Functions/ # Python backend scripts for reminders
+─ template.yaml # Deployment/configuration template
+- README.md # Project documentation
 
 
