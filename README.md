@@ -21,7 +21,7 @@ Built with **AWS Lambda, API Gateway, and a simple frontend**.
 - **Backend**: Python AWS Lambda functions  
 - **Frontend**: HTML, JavaScript  
 - **Serverless Infrastructure**: AWS SAM / CloudFormation  
-- **Data Storage**: Optional JSON file or DynamoDB
+- **Data Storage**:  DynamoDB
 
 ---
 
