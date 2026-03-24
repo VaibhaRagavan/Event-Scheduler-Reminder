@@ -1,0 +1,48 @@
+ {
+  "version": "2.0",
+  "routeKey": "ANY /Event_creation",
+  "rawPath": "/default/Event_creation",
+  "rawQueryString": "",
+  "headers": {
+    "accept": "*/*",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9",
+    "content-length": "216",
+    "content-type": "application/json",
+    "host": "wn1jv4hbnd.execute-api.eu-west-1.amazonaws.com",
+    "origin": "http://wishpal.vaibharagavan.com",
+    "priority": "u=1, i",
+    "referer": "http://wishpal.vaibharagavan.com/",
+    "sec-ch-ua": "\"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"macOS\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+    "x-amzn-trace-id": "Root=1-680f4164-3335f5ff06e2faf61ae58a11",
+    "x-forwarded-for": "86.43.207.205",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https"
+  },
+  "requestContext": {
+    "accountId": "710271939971",
+    "apiId": "wn1jv4hbnd",
+    "domainName": "wn1jv4hbnd.execute-api.eu-west-1.amazonaws.com",
+    "domainPrefix": "wn1jv4hbnd",
+    "http": {
+      "method": "POST",
+      "path": "/default/Event_creation",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "86.43.207.205",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
+    },
+    "requestId": "JucnwjQljoEEMwQ=",
+    "routeKey": "ANY /Event_creation",
+    "stage": "default",
+    "time": "28/Apr/2025:08:50:44 +0000",
+    "timeEpoch": 1745830244498
+  },
+  "body": "{\"email\":\"vaibha97@gmail.com\",\"event_type\":\"birthday\",\"event_date\":\"2025-04-30\",\"persons\":[{\"name\":\"Sudharsan\",\"phone\":\"+919360553239\",\"wish\":\"....\"}],\"remindme\":\"true\",\"post\":\"true\"}",
+  "isBase64Encoded": "False"
+}
