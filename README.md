@@ -26,9 +26,9 @@ Built with **AWS Lambda, API Gateway, and a simple frontend**.
 ---
 ## Folder Structure
 Event Schedule r& Reminder
-─ Frontend_files/ # HTML, CSS, JS for the frontend
-─ Functions/ # Python backend scripts for reminders
-─ template.yaml # Deployment/configuration template
-- README.md # Project documentation
+─>Frontend_files/ # HTML, CSS, JS for the frontend
+─>Functions/ # Python backend scripts for reminders
+─>template.yaml # Deployment/configuration template
+-> README.md # Project documentation
 
 
